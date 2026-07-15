@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Semantic tokens. Light is default; .dark swaps the palette. */
+:root {
+  --surface: 248 249 251;
+  --surface-raised: 255 255 255;
+  --ink: 23 26 33;
+  --ink-muted: 100 108 122;
+  --accent: 79 70 229;
+  --success: 22 163 74;
+  --danger: 220 38 38;
+  --radius: 0.625rem;
+}
+
+.dark {
+  --surface: 15 17 23;
+  --surface-raised: 24 27 36;
+  --ink: 236 238 243;
+  --ink-muted: 148 156 172;
+  --accent: 129 140 248;
+}
+
+body {
+  @apply bg-surface text-ink antialiased;
+}
