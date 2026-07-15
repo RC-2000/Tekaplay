@@ -15,6 +15,8 @@ from app.db.base import Base
 # Model modules must be imported so autogenerate sees their tables.
 from app.modules.users import models as user_models  # noqa: F401
 from app.modules.auth import models as auth_models  # noqa: F401
+from app.modules.runtime import models as runtime_models  # noqa: F401
+from app.modules.content import models as content_models  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:

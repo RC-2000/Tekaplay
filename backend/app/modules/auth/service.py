@@ -57,6 +57,11 @@ class AuthService(BaseService):
         )
         self._users.add(user)
         await self._users.flush()
+        # Default role: learner (seeded by migration 0001). Graceful when the
+        # role is absent (e.g. metadata-only test databases).
+        learner = await self._users.get_role_by_name("learner")
+        if learner is not None:
+            await self._users.assign_role(user.id, learner.id)
         await self._issue_action_token(user, purpose="email_verification", ttl=_VERIFICATION_TTL)
         await self.emit(DomainEvent(name=USER_REGISTERED, user_id=user.id))
         self._audit.record(action="auth.registered", actor_user_id=user.id,

@@ -44,7 +44,13 @@ Then run migrations and bootstrap the first admin:
 ```bash
 docker compose exec api alembic upgrade head
 docker compose exec api python -m app.scripts.create_admin admin@example.com <password>
+docker compose exec api python -m app.scripts.seed_demo   # publish the example mission
 ```
+
+Content authoring flows through `/api/v1/content`: projects hold immutable
+version snapshots moving draft → in_review → approved → published, with
+rollback republishing any superseded version. The library tree for players
+is at `GET /api/v1/content/library`.
 
 ## Local development without Docker
 

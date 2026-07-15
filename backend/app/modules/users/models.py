@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Any
 
 from sqlalchemy import (
-    JSON,
     Boolean,
     DateTime,
     ForeignKey,
@@ -14,13 +13,10 @@ from sqlalchemy import (
     UniqueConstraint,
     Uuid,
 )
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, SoftDeleteMixin, TimestampMixin, UUIDPrimaryKeyMixin
-
-# JSON on SQLite (tests), JSONB on PostgreSQL (production)
-PortableJSON = JSON().with_variant(JSONB(), "postgresql")
+from app.db.types import PortableJSON
 
 
 class User(Base, UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin):

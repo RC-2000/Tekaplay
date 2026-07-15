@@ -1,0 +1,12 @@
+"""Events the runtime publishes. Consumed by analytics, achievements,
+XP, adaptive learning, notifications — none of which the runtime knows."""
+MISSION_STARTED = "mission.started"
+MISSION_FINISHED = "mission.finished"
+SCENE_ENTERED = "scene.entered"
+SCENE_COMPLETED = "scene.completed"
+QUESTION_ANSWERED = "question.answered"
+INVENTORY_CHANGED = "inventory.changed"
+XP_AWARDED = "xp.awarded"
+ACHIEVEMENT_UNLOCKED = "achievement.unlocked"
+SAVE_CREATED = "save.created"
+SESSION_RESUMED = "session.resumed"

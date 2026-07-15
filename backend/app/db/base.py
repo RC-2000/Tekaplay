@@ -10,8 +10,10 @@ same models run on PostgreSQL in production and SQLite in fast local tests.
 import uuid
 from datetime import datetime
 
+from typing import Any
+
 from sqlalchemy import DateTime, Uuid, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -52,6 +54,9 @@ class VersionedMixin:
 
     version: Mapped[int] = mapped_column(default=1, nullable=False)
 
-    # Models using this mixin must set, in their own __mapper_args__:
-    #   {"version_id_col": <Model>.version}
-    # so SQLAlchemy raises StaleDataError on concurrent updates.
+    @declared_attr.directive
+    def __mapper_args__(cls) -> dict[str, Any]:
+        # Wires automatically for every model using this mixin: SQLAlchemy
+        # bumps `version` on UPDATE and raises StaleDataError when the row
+        # changed underneath us.
+        return {"version_id_col": cls.version}

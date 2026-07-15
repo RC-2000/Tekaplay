@@ -32,3 +32,7 @@ Rules:
   modules move together. No other module may import either one's models —
   everything else goes through their service interfaces or events
   (`user.registered`, `user.deleted`, `auth.login_succeeded`, ...).
+- **content → runtime** crosses only through `build_runtime_service` (service
+  interface) to publish live definitions, plus the shared `definition.py`
+  schema for validation — never runtime models or repositories. `runtime`
+  never imports `content`.
