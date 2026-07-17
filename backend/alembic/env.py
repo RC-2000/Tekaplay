@@ -17,6 +17,10 @@ from app.modules.users import models as user_models  # noqa: F401
 from app.modules.auth import models as auth_models  # noqa: F401
 from app.modules.runtime import models as runtime_models  # noqa: F401
 from app.modules.content import models as content_models  # noqa: F401
+from app.modules.xp import models as xp_models  # noqa: F401
+from app.modules.achievements import models as achievement_models  # noqa: F401
+from app.modules.progress import models as progress_models  # noqa: F401
+from app.modules.inventory import models as inventory_models  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:

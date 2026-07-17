@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from app.db.session import SessionFactory
-from app.events.bus import DomainEvent, bus
+from app.events.bus import DomainEvent, InProcessEventBus, bus
 from app.modules.runtime.repository import (
     GameDefinitionRepository,
     GameSessionRepository,
@@ -26,7 +26,7 @@ async def published_definition():
             definitions=GameDefinitionRepository(session),
             sessions=GameSessionRepository(session),
             saves=SavePointRepository(session),
-            event_bus=bus,
+            event_bus=InProcessEventBus(),  # direct-service: no fan-out mid-txn
         )
         record = await service.publish_definition(slug="aws-cp-mission-1", raw=raw)
         await session.commit()
@@ -178,12 +178,14 @@ async def test_optimistic_concurrency_conflict(published_definition, auth_tokens
 
     definition_id = uuidlib.UUID(published_definition)
 
+    isolated = InProcessEventBus()  # direct-service test: no fan-out mid-txn
+
     async def make_service(session):
         return RuntimeService(
             definitions=GameDefinitionRepository(session),
             sessions=GameSessionRepository(session),
             saves=SavePointRepository(session),
-            event_bus=bus,
+            event_bus=isolated,
         )
 
     async with SessionFactory() as s0:

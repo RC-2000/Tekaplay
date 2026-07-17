@@ -106,7 +106,7 @@ class RuntimeService(BaseService):
         if not replay:
             existing = await self._sessions.get_active(user_id, definition_id)
             if existing is not None:  # resume anywhere
-                await self._publish(existing, [(ev.SESSION_RESUMED, {})])
+                await self._publish(existing, [(ev.SESSION_RESUMED, {})], slug=record.slug)
                 return self._view(record, existing)
         defn = self._parse(record)
         state, pending = engine.new_state(defn)
@@ -114,7 +114,7 @@ class RuntimeService(BaseService):
                               status=engine.STATUS_ACTIVE, state=state)
         self._sessions.add(session)
         await self._flush()
-        await self._publish(session, [(ev.MISSION_STARTED, {})] + pending)
+        await self._publish(session, [(ev.MISSION_STARTED, {})] + pending, slug=record.slug)
         return self._view(record, session)
 
     async def get_view(self, *, user_id: uuid.UUID, session_id: uuid.UUID) -> SessionView:
@@ -129,7 +129,7 @@ class RuntimeService(BaseService):
         state = copy.deepcopy(session.state)
         pending = engine.advance(defn, state)
         await self._persist(session, state)
-        await self._publish(session, pending)
+        await self._publish(session, pending, slug=record.slug)
         return self._view(record, session)
 
     async def choose(self, *, user_id: uuid.UUID, session_id: uuid.UUID,
@@ -140,7 +140,7 @@ class RuntimeService(BaseService):
         state = copy.deepcopy(session.state)
         pending = engine.choose(defn, state, element_id, option_id)
         await self._persist(session, state)
-        await self._publish(session, pending)
+        await self._publish(session, pending, slug=record.slug)
         return self._view(record, session)
 
     async def answer(self, *, user_id: uuid.UUID, session_id: uuid.UUID,
@@ -151,7 +151,7 @@ class RuntimeService(BaseService):
         state = copy.deepcopy(session.state)
         result, pending = engine.answer(defn, state, element_id, response)
         await self._persist(session, state)
-        await self._publish(session, pending)
+        await self._publish(session, pending, slug=record.slug)
         return AnswerOut(correct=result.correct, score=result.score,
                          feedback=result.feedback, view=self._view(record, session))
 
@@ -184,7 +184,8 @@ class RuntimeService(BaseService):
         session.ending_id = restored.get("ending_id")
         session.completed_at = None if session.status == engine.STATUS_ACTIVE else session.completed_at
         await self._persist(session, restored)
-        await self._publish(session, [(ev.SESSION_RESUMED, {"from_save": str(save_id)})])
+        await self._publish(session, [(ev.SESSION_RESUMED, {"from_save": str(save_id)})],
+                            slug=record.slug)
         return self._view(record, session)
 
     # ── Internals ──────────────────────────────────────────────
@@ -214,9 +215,12 @@ class RuntimeService(BaseService):
                 "This session was updated by another request — reload and retry"
             ) from exc
 
-    async def _publish(self, session: GameSession, pending: list[PendingEvent]) -> None:
+    async def _publish(self, session: GameSession, pending: list[PendingEvent],
+                       slug: str | None = None) -> None:
         base = {"session_id": str(session.id),
                 "definition_id": str(session.definition_id)}
+        if slug is not None:
+            base["definition_slug"] = slug
         for name, payload in pending:
             await self.emit(DomainEvent(name=name, user_id=session.user_id,
                                         payload={**base, **payload}))

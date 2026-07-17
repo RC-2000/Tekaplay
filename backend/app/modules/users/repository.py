@@ -9,6 +9,12 @@ from app.repositories.base import BaseRepository
 class UserRepository(BaseRepository[User]):
     model = User
 
+    async def get_many(self, ids: list[uuid.UUID]) -> list[User]:
+        if not ids:
+            return []
+        stmt = self._base_query().where(User.id.in_(ids))
+        return list((await self.session.execute(stmt)).scalars())
+
     async def get_by_email(self, email: str) -> User | None:
         stmt = self._base_query().where(User.email == email.strip().lower())
         return (await self.session.execute(stmt)).scalar_one_or_none()

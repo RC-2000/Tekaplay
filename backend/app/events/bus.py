@@ -77,3 +77,29 @@ class InProcessEventBus:
 
 
 bus: EventBus = InProcessEventBus()
+
+
+class BufferedEventBus:
+    """Transactional wrapper: publish() buffers; flush() delivers to the inner
+    bus. Request handling wires one of these per request and flushes only
+    after the DB transaction commits — so subscribers never observe events for
+    state that was rolled back, and never race the emitting transaction.
+    (Precursor of the durable outbox; see docs/ARCHITECTURE.md.)"""
+
+    def __init__(self, inner: EventBus) -> None:
+        self._inner = inner
+        self._buffer: list[DomainEvent] = []
+
+    def subscribe(self, event_name: str, handler: Handler) -> None:
+        self._inner.subscribe(event_name, handler)
+
+    async def publish(self, event: DomainEvent) -> None:
+        self._buffer.append(event)
+
+    async def flush(self) -> None:
+        buffered, self._buffer = self._buffer, []
+        for event in buffered:
+            await self._inner.publish(event)
+
+    def discard(self) -> None:
+        self._buffer.clear()

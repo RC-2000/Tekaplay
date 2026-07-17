@@ -23,6 +23,9 @@ class UserService(BaseService):
     async def list(self, *, limit: int, offset: int) -> list[User]:
         return await self._repo.list(limit=limit, offset=offset)
 
+    async def get_many(self, ids: list[uuid.UUID]) -> list[User]:
+        return await self._repo.get_many(ids)
+
     async def update_profile(self, user_id: uuid.UUID, patch: UserUpdate) -> User:
         user = await self._repo.get(user_id)
         for field, value in patch.model_dump(exclude_none=True).items():
@@ -57,3 +60,11 @@ class UserService(BaseService):
         if not user.is_active:
             raise NotFoundError("User not found", details={"id": str(user_id)})
         return user
+
+
+def build_user_service(session, event_bus: EventBus) -> UserService:
+    """Composition helper — how other modules obtain the users service."""
+    from app.modules.users.audit import AuditService
+    from app.modules.users.repository import UserRepository
+
+    return UserService(UserRepository(session), AuditService(session), event_bus)

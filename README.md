@@ -52,6 +52,11 @@ version snapshots moving draft → in_review → approved → published, with
 rollback republishing any superseded version. The library tree for players
 is at `GET /api/v1/content/library`.
 
+Player systems (`/xp`, `/achievements`, `/progress`, `/inventory`) are pure
+event subscribers of the runtime's stream — completing missions produces XP,
+levels, achievement grants, mastery stats, streaks, collectibles, and a
+leaderboard with no direct coupling to the game engine.
+
 ## Local development without Docker
 
 Backend:

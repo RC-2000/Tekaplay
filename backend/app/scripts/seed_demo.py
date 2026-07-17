@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from app.db.session import SessionFactory
-from app.events.bus import bus
+from app.events.bus import InProcessEventBus
 from app.modules.runtime.repository import (
     GameDefinitionRepository,
     GameSessionRepository,
@@ -22,7 +22,7 @@ async def main() -> None:
             definitions=GameDefinitionRepository(session),
             sessions=GameSessionRepository(session),
             saves=SavePointRepository(session),
-            event_bus=bus,
+            event_bus=InProcessEventBus(),
         )
         record = await service.publish_definition(slug="aws-cp-mission-1", raw=raw)
         await session.commit()

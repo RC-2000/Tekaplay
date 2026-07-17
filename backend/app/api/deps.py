@@ -10,6 +10,7 @@ ignorant of roles entirely, so role composition is runtime-configurable
 without code changes.
 """
 from collections.abc import AsyncIterator
+from contextvars import ContextVar
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -18,16 +19,31 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.errors import AuthenticationError, PermissionDeniedError
 from app.core.security import decode_access_token
 from app.db.session import get_session
-from app.events.bus import EventBus, bus
+from app.events.bus import BufferedEventBus, EventBus, bus
+
+_request_bus: ContextVar[BufferedEventBus | None] = ContextVar(
+    "request_bus", default=None
+)
 
 
 async def get_db() -> AsyncIterator[AsyncSession]:
-    async for session in get_session():
-        yield session
+    """Request-scoped session with transactional event delivery: events
+    emitted during the request buffer in a BufferedEventBus and flush to the
+    real bus only after the commit succeeds. A rollback discards them."""
+    buffered = BufferedEventBus(bus)
+    token = _request_bus.set(buffered)
+    try:
+        async for session in get_session():  # get_session commits on success
+            yield session
+        await buffered.flush()  # reached only after a successful commit
+    finally:
+        _request_bus.reset(token)
 
 
-def get_event_bus() -> EventBus:
-    return bus
+def get_event_bus(_: Annotated[AsyncSession, Depends(get_db)]) -> EventBus:
+    """The session dependency (cached per request) must resolve first so the
+    buffered bus exists; outside a request this falls back to the global bus."""
+    return _request_bus.get() or bus
 
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
