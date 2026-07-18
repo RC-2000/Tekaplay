@@ -26,6 +26,9 @@ class UserService(BaseService):
     async def get_many(self, ids: list[uuid.UUID]) -> list[User]:
         return await self._repo.get_many(ids)
 
+    async def organization_ids_for(self, user_id: uuid.UUID) -> list[uuid.UUID]:
+        return await self._repo.organization_ids_for(user_id)
+
     async def update_profile(self, user_id: uuid.UUID, patch: UserUpdate) -> User:
         user = await self._repo.get(user_id)
         for field, value in patch.model_dump(exclude_none=True).items():

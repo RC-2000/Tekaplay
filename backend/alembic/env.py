@@ -21,6 +21,8 @@ from app.modules.xp import models as xp_models  # noqa: F401
 from app.modules.achievements import models as achievement_models  # noqa: F401
 from app.modules.progress import models as progress_models  # noqa: F401
 from app.modules.inventory import models as inventory_models  # noqa: F401
+from app.modules.ai import models as ai_models  # noqa: F401
+from app.modules.commerce import models as commerce_models  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:

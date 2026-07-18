@@ -2,7 +2,14 @@ import uuid
 
 from sqlalchemy import select
 
-from app.modules.users.models import Permission, RolePermission, Role, User, UserRole
+from app.modules.users.models import (
+    OrganizationMember,
+    Permission,
+    Role,
+    RolePermission,
+    User,
+    UserRole,
+)
 from app.repositories.base import BaseRepository
 
 
@@ -27,6 +34,12 @@ class UserRepository(BaseRepository[User]):
             .where(UserRole.user_id == user_id)
         )
         return set((await self.session.execute(stmt)).scalars())
+
+    async def organization_ids_for(self, user_id: uuid.UUID) -> list[uuid.UUID]:
+        stmt = select(OrganizationMember.organization_id).where(
+            OrganizationMember.user_id == user_id
+        )
+        return list((await self.session.execute(stmt)).scalars())
 
     async def get_role_by_name(self, name: str) -> Role | None:
         stmt = select(Role).where(Role.name == name)

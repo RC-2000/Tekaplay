@@ -1,16 +1,33 @@
 import type { Metadata } from 'next';
+import { Chakra_Petch, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 
+const display = Chakra_Petch({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-display',
+});
+const body = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-body',
+});
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+});
+
 export const metadata: Metadata = {
   title: 'QuestForge',
-  description: 'Learn professional certifications through story-driven games.',
+  description: 'Certifications, taught as adventures.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className={`${display.variable} ${body.variable} ${mono.variable} font-body`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -57,6 +57,30 @@ event subscribers of the runtime's stream — completing missions produces XP,
 levels, achievement grants, mastery stats, streaks, collectibles, and a
 leaderboard with no direct coupling to the game engine.
 
+The AI service (`/ai`) queues every request through a provider-neutral
+gateway (echo locally, Anthropic in production via `AI_PROVIDER`), caches
+responses in Redis + the database, personalizes study plans and weakness
+analysis with the learner's own mastery data, and rate-limits per user.
+The frontend never talks to an LLM directly.
+
+Billing (`/commerce`) runs on Stripe behind a gateway (`PAYMENT_PROVIDER=fake`
+locally): plans with trials, hosted checkout with promotion-code coupons, the
+Stripe billing portal for invoices and cancellation, admin-initiated refunds,
+and enterprise licenses that grant premium to whole organizations. All local
+state is written by verified, idempotent webhooks at
+`POST /api/v1/commerce/webhooks/stripe`.
+
+The web app (frontend/) is the full player experience: log in, pick a mission
+from the library, and play it as a comm-log — dialogue transmissions, decision
+points, challenges, telemetry HUD, checkpoints, and endings — with the
+dashboard tracking rank, streak, achievements, and mastery. Dark/light themes
+are token swaps; every page has loading, empty, and error states.
+
+Creator Studio lives at /studio for accounts with the creator role: manage
+projects, edit draft versions in a JSON editor with a live mission outline,
+validate against the runtime schema, draft quiz questions with AI, and move
+versions through review → publish → rollback.
+
 ## Local development without Docker
 
 Backend:

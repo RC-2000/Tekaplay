@@ -10,6 +10,8 @@ import os
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///./test.db")
 os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("SECRET_KEY", "test-secret-key")
+os.environ.setdefault("AI_PROVIDER", "echo")
+os.environ.setdefault("AI_DISPATCH", "inline")
 
 import pytest
 from httpx import ASGITransport, AsyncClient

@@ -39,6 +39,20 @@ class Settings(BaseSettings):
     object_storage_secret_key: str = ""
     object_storage_region: str = "auto"
 
+    # AI service — provider-neutral gateway; the frontend never holds keys
+    ai_provider: str = Field(default="echo", pattern="^(echo|anthropic)$")
+    ai_model: str = "claude-sonnet-4-6"
+    ai_api_key: str = ""
+    ai_dispatch: str = Field(default="celery", pattern="^(celery|inline)$")
+    ai_cache_ttl_seconds: int = 86400
+    ai_rate_limit_per_minute: int = 20
+
+    # Commerce — Stripe behind a gateway; 'fake' is deterministic for dev/CI
+    payment_provider: str = Field(default="fake", pattern="^(fake|stripe)$")
+    stripe_api_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_webhook_tolerance_seconds: int = 300
+
     # Auth
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 15

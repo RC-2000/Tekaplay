@@ -74,3 +74,9 @@ class ProgressService(BaseService):
 
     async def streak_for(self, user_id: uuid.UUID) -> PlayerStreak | None:
         return await self._streaks.get_for_user(user_id)
+
+
+def build_progress_service(session, event_bus: EventBus) -> ProgressService:
+    """Composition helper (module boundary rule)."""
+    return ProgressService(MissionProgressRepository(session),
+                           PlayerStreakRepository(session), event_bus)

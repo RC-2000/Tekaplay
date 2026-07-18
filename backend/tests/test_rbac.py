@@ -41,3 +41,12 @@ async def test_anonymous_rejected(client):
     resp = await client.get("/api/v1/users/me")
     assert resp.status_code == 401
     assert resp.json()["error"]["code"] == "authentication_required"
+
+
+async def test_my_permissions_reflects_grants(client, auth_tokens, registered_user):
+    headers = {"Authorization": f"Bearer {auth_tokens['access_token']}"}
+    before = (await client.get("/api/v1/users/me/permissions", headers=headers)).json()
+    assert "users.read" not in before
+    await _grant_permission(registered_user["email"], "users.read")
+    after = (await client.get("/api/v1/users/me/permissions", headers=headers)).json()
+    assert "users.read" in after

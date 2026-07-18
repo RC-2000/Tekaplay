@@ -10,6 +10,8 @@ from app.events.bus import EventBus
 
 def mount_routers(api_router: APIRouter) -> None:
     from app.modules.achievements.router import router as achievements_router
+    from app.modules.ai.router import router as ai_router
+    from app.modules.commerce.router import router as commerce_router
     from app.modules.auth.router import router as auth_router
     from app.modules.content.router import router as content_router
     from app.modules.inventory.router import router as inventory_router
@@ -26,6 +28,8 @@ def mount_routers(api_router: APIRouter) -> None:
     api_router.include_router(xp_router)
     api_router.include_router(achievements_router)
     api_router.include_router(inventory_router)
+    api_router.include_router(ai_router)
+    api_router.include_router(commerce_router)
 
 
 def wire_event_subscribers(bus: EventBus) -> None:

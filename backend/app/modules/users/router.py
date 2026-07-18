@@ -20,6 +20,15 @@ async def get_me(current_user: CurrentUser) -> UserOut:
     return UserOut.model_validate(current_user)
 
 
+@router.get("/me/permissions", response_model=list[str])
+async def my_permissions(current_user: CurrentUser, session: DbSession) -> list[str]:
+    """The caller's effective permission codes — lets clients gate UI
+    (e.g. Creator Studio) without a failed-request probe. Authorization is
+    still enforced server-side on every route."""
+    codes = await UserRepository(session).get_permission_codes(current_user.id)
+    return sorted(codes)
+
+
 @router.patch("/me", response_model=UserOut)
 async def update_me(
     patch: UserUpdate, current_user: CurrentUser, session: DbSession, bus: Bus
