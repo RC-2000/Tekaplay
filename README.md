@@ -1,4 +1,4 @@
-# QuestForge
+# Tekaplay
 
 An immersive educational gaming platform. Professional certifications and exams taught through
 interactive, story-driven games — where **games are data, not code**, executed by a generic
