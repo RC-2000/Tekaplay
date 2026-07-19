@@ -23,7 +23,7 @@ wire_event_subscribers(bus)
 log = get_logger(__name__)
 
 app = FastAPI(
-    title="QuestForge API",
+    title="Tekaplay API",
     version="1.0.0",
     docs_url=f"{settings.api_v1_prefix}/docs",
     openapi_url=f"{settings.api_v1_prefix}/openapi.json",

@@ -12,12 +12,12 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: questforge
-          POSTGRES_PASSWORD: questforge
-          POSTGRES_DB: questforge_test
+          POSTGRES_USER: tekaplay
+          POSTGRES_PASSWORD: tekaplay
+          POSTGRES_DB: tekaplay_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U questforge"
+          --health-cmd "pg_isready -U tekaplay"
           --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
       - name: Migration check (upgrade + downgrade + upgrade)
         working-directory: backend
         env:
-          DATABASE_URL: postgresql+asyncpg://questforge:questforge@localhost:5432/questforge_test
+          DATABASE_URL: postgresql+asyncpg://tekaplay:tekaplay@localhost:5432/tekaplay_test
         run: |
           alembic upgrade head
           alembic downgrade base
@@ -45,7 +45,7 @@ jobs:
       - name: Test
         working-directory: backend
         env:
-          DATABASE_URL: postgresql+asyncpg://questforge:questforge@localhost:5432/questforge_test
+          DATABASE_URL: postgresql+asyncpg://tekaplay:tekaplay@localhost:5432/tekaplay_test
         run: pytest -q
 
   frontend:
@@ -74,9 +74,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image
-        run: docker build -t questforge-api ./backend
+        run: docker build -t tekaplay-api ./backend
       - name: Build frontend image
-        run: docker build -t questforge-web ./frontend
+        run: docker build -t tekaplay-web ./frontend
 
   # Deploy jobs (staging → smoke tests → manual approval → production) are added
   # in the infrastructure slice once hosting targets are provisioned.

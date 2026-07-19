@@ -53,5 +53,5 @@ async def list_users(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
 ) -> UserPage:
-    users = await _service(session, bus).list(limit=limit, offset=offset)
+    users = await _service(session, bus).list_users(limit=limit, offset=offset)
     return UserPage(items=[UserOut.model_validate(u) for u in users], limit=limit, offset=offset)

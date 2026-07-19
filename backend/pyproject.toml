@@ -1,7 +1,7 @@
 [project]
-name = "questforge-backend"
+name = "tekaplay-backend"
 version = "0.1.0"
-description = "QuestForge platform backend — modular monolith with service-per-module boundaries"
+description = "Tekaplay platform backend — modular monolith with service-per-module boundaries"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",

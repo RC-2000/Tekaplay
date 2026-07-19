@@ -20,7 +20,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'QuestForge',
+  title: 'Tekaplay',
   description: 'Certifications, taught as adventures.',
 };
 

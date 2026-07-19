@@ -20,7 +20,7 @@ class UserService(BaseService):
     async def get(self, user_id: uuid.UUID) -> User:
         return await self._repo.get(user_id)
 
-    async def list(self, *, limit: int, offset: int) -> list[User]:
+    async def list_users(self, *, limit: int, offset: int) -> list[User]:
         return await self._repo.list(limit=limit, offset=offset)
 
     async def get_many(self, ids: list[uuid.UUID]) -> list[User]:

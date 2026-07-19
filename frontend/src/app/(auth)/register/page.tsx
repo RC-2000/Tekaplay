@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-6">
-      <Eyebrow>QuestForge // enlist</Eyebrow>
+      <Eyebrow>Tekaplay // enlist</Eyebrow>
       <h1 className="font-display text-2xl font-semibold">Create your account</h1>
       <Card>
         <form onSubmit={submit} className="flex flex-col gap-4">

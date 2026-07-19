@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-6">
-      <Eyebrow>QuestForge // sign in</Eyebrow>
+      <Eyebrow>Tekaplay // sign in</Eyebrow>
       <h1 className="font-display text-2xl font-semibold">Back to the field</h1>
       <Card>
         <form onSubmit={submit} className="flex flex-col gap-4">

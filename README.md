@@ -1,16 +1,13 @@
-# QuestForge
+# Tekaplay
 
 An immersive educational gaming platform. Professional certifications and exams taught through
 interactive, story-driven games — where **games are data, not code**, executed by a generic
 Game Runtime Engine.
 
-> The name `questforge` is a working codename. Rename via a single find/replace; nothing is
-> coupled to it.
-
 ## Repository layout
 
 ```
-questforge/
+tekaplay/
 ├── docs/                  Architecture and design documents (start with ARCHITECTURE.md)
 ├── backend/               FastAPI application (modular monolith, service-per-module)
 │   ├── app/

@@ -36,7 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!hydrated || !accessToken) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <Spinner label="Loading QuestForge" />
+        <Spinner label="Loading Tekaplay" />
       </main>
     );
   }
@@ -46,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-6 px-4">
           <Link href="/dashboard" className="font-display text-lg font-semibold tracking-wide">
-            Quest<span className="text-accent">Forge</span>
+            Teka<span className="text-accent">play</span>
           </Link>
           <nav aria-label="Primary" className="flex gap-1">
             {nav.map((item) => (

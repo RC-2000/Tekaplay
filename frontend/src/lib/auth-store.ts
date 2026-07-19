@@ -55,7 +55,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'qf-auth',
+      name: 'tekaplay-auth',
       partialize: (s) => ({
         accessToken: s.accessToken,
         refreshToken: s.refreshToken,

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* QuestForge tokens — "mission transmission log".
+/* Tekaplay tokens — "mission transmission log".
    Dark-first deep ink-blue with signal amber; teal marks mastery. */
 :root {
   --surface: 245 246 248;

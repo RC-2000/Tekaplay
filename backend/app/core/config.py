@@ -16,14 +16,14 @@ class Settings(BaseSettings):
 
     # Application
     app_env: str = Field(default="local", pattern="^(local|test|staging|production)$")
-    app_name: str = "questforge"
+    app_name: str = "tekaplay"
     api_v1_prefix: str = "/api/v1"
     secret_key: str = "insecure-local-only"
     log_level: str = "INFO"
     cors_origins: list[str] = ["http://localhost:3000"]
 
     # Database
-    database_url: str = "postgresql+asyncpg://questforge:questforge@localhost:5432/questforge"
+    database_url: str = "postgresql+asyncpg://tekaplay:tekaplay@localhost:5432/tekaplay"
     database_pool_size: int = 10
     database_max_overflow: int = 20
 
@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
     # Object storage — S3-compatible interface (R2 today, S3 later)
     object_storage_endpoint: str = ""
-    object_storage_bucket: str = "questforge-assets"
+    object_storage_bucket: str = "tekaplay-assets"
     object_storage_access_key: str = ""
     object_storage_secret_key: str = ""
     object_storage_region: str = "auto"

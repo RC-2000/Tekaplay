@@ -1,10 +1,10 @@
-# QuestForge — System Architecture
+# Tekaplay — System Architecture
 
 **Status:** Living document. Slice 1 (foundation) is implemented; later sections describe committed design that subsequent slices fill in.
 
 ## 1. What this system is
 
-QuestForge is an educational gaming platform that teaches professional certifications (AWS, Azure, CISSP, PMP, CPA, SAT, university courses, and any future domain) through interactive, story-driven games. The defining architectural commitment is that **games are data, not code**. A single, generic Game Runtime Engine interprets JSON game definitions; no certification-specific logic ever exists in the platform. Adding a new certification, exam, or entire subject area is a content operation performed in the Creator Studio, not a deployment.
+Tekaplay is an educational gaming platform that teaches professional certifications (AWS, Azure, CISSP, PMP, CPA, SAT, university courses, and any future domain) through interactive, story-driven games. The defining architectural commitment is that **games are data, not code**. A single, generic Game Runtime Engine interprets JSON game definitions; no certification-specific logic ever exists in the platform. Adding a new certification, exam, or entire subject area is a content operation performed in the Creator Studio, not a deployment.
 
 The content hierarchy every game follows is: Certification → Campaign → Course → Mission → Scene → Challenge → Events → Rewards. The runtime walks this tree, evaluates conditions against player state, emits events, and grants rewards. Everything else on the platform — progress, achievements, XP, analytics, adaptive learning, notifications — is a consumer of the events that walk produces.
 

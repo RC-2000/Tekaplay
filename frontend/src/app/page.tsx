@@ -16,7 +16,7 @@ export default function LandingPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 px-6">
-      <Eyebrow>QuestForge // incoming transmission</Eyebrow>
+      <Eyebrow>Tekaplay // incoming transmission</Eyebrow>
       <h1 className="font-display text-5xl font-semibold leading-[1.05]">
         Your certification is
         <br />a mission. Take it.
